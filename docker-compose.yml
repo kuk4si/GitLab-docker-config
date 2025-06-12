@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab
+    hostname: 'gitlab.example.com'  # Замените на ваш домен или IP
+    restart: always
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab.example.com'  # Тот же hostname
+    networks:
+      gitlab_net:
+        ipv4_address: 172.20.0.100 # Статический IP
+    ports:
+      - "80:80"
+      - "443:443"  # Если нужен HTTPS
+      - "2222:22"  # SSH порт (меняем, чтобы не конфликтовал с хостом)
+    volumes:
+      - /home/andrey/data/gitlab/config:/etc/gitlab
+      - /home/andrey/data/gitlab/logs:/var/log/gitlab
+      - /home/andrey/data/gitlab/data:/var/opt/gitlab
+
+
+
+networks:
+  gitlab_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+          gateway: 172.20.0.1
