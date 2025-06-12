@@ -17,12 +17,12 @@ services:
       - "443:443"  # Если нужен HTTPS
       - "2222:22"  # SSH порт (меняем, чтобы не конфликтовал с хостом)
     volumes:
-      - /home/andrey/data/gitlab/config:/etc/gitlab
+      - /home/andrey/data/gitlab/config:/etc/gitlab    # Создаю волюм в локальной папке пользователя
       - /home/andrey/data/gitlab/logs:/var/log/gitlab
       - /home/andrey/data/gitlab/data:/var/opt/gitlab
 
 
-
+# Отдельная сеть что бы изолировать весь CI/CD
 networks:
   gitlab_net:
     driver: bridge
