@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  gitlab-runner1:
+    image: gitlab/gitlab-runner:latest
+    container_name: gitlab-runner1
+    restart: always
+
+    networks:
+      gitlab_net:
+        ipv4_address: 172.20.0.101 # Статический IP
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - runner1:/etc/gitlab-runner
+
+volumes:
+  runner1:
+
+# Отдельная сеть что бы изолировать весь CI/CD
+networks:
+  gitlab_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+          gateway: 172.20.0.1
