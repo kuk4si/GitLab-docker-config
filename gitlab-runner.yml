@@ -1,27 +1,27 @@
-version: '3'
+version: '3.8'
 
 services:
-  gitlab-runner1:
+  gitlab-runner:
     image: gitlab/gitlab-runner:latest
-    container_name: gitlab-runner1
+    container_name: gitlab-runner
     restart: always
-
-    networks:
-      gitlab_net:
-        ipv4_address: 172.20.0.101 # Статический IP
-
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - runner1:/etc/gitlab-runner
+      - gitlab-runner-config:/etc/gitlab-runner
+    networks:
+      - gitlab-network
+    environment:
+      - CI_SERVER_URL=http://gitlab.local/  # Важно: должен совпадать с external_url GitLab
+      - REGISTRATION_TOKEN=YOUR_REGISTRATION_TOKEN  # Замените на реальный токен из GitLab
+      - RUNNER_NAME=my-runner
+      - RUNNER_EXECUTOR=docker
+      - DOCKER_IMAGE=alpine:latest
+      - DOCKER_NETWORK_MODE=gitlab-network  # Используем ту же сеть, что и GitLab
 
 volumes:
-  runner1:
+  gitlab-runner-config:
 
-# Отдельная сеть что бы изолировать весь CI/CD
 networks:
-  gitlab_net:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/24
-          gateway: 172.20.0.1
+  gitlab-network:
+    external: true  # Используем уже созданную сеть из gitlab-compose.yml
+
