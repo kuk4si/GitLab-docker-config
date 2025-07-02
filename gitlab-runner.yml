@@ -7,7 +7,7 @@ services:
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - gitlab-runner-config:/etc/gitlab-runner
+      - ./gitlab-runner/config:/etc/gitlab-runner
     networks:
       - gitlab-network
     environment:
@@ -17,9 +17,6 @@ services:
       - RUNNER_EXECUTOR=docker
       - DOCKER_IMAGE=alpine:latest
       - DOCKER_NETWORK_MODE=gitlab-network  # Используем ту же сеть, что и GitLab
-
-volumes:
-  gitlab-runner-config:
 
 networks:
   gitlab-network:
