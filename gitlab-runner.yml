@@ -7,7 +7,7 @@ services:
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./gitlab-runner/config:/etc/gitlab-runner
+      - ~/data/gitlab-runner/config:/etc/gitlab-runner
     networks:
       - gitlab-network
     environment:
